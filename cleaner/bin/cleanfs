@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 sudo pacman -Sc
-journalctl --vacuum-size 512M
+sudo journalctl --vacuum-size 512M
