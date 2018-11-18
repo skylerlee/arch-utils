@@ -18,7 +18,8 @@ func init() {
 func main() {
 	path := os.Args[1]
 	addr := fmt.Sprintf("%s:%s", host, port)
-	server := http.FileServer(http.Dir(path))
-	err := http.ListenAndServe(addr, server)
+	handler := http.FileServer(http.Dir(path))
+	http.Handle("/", handler)
+	err := http.ListenAndServe(addr, nil)
 	log.Fatal(err)
 }
