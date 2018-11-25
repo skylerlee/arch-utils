@@ -13,7 +13,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&host, "a", "127.0.0.1", "address to use")
+	flag.StringVar(&host, "a", "0.0.0.0", "address to use")
 	flag.IntVar(&port, "p", 8080, "port to bind to")
 }
 
