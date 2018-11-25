@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 )
 
@@ -33,12 +34,37 @@ func logRequest(next http.Handler) http.Handler {
 	})
 }
 
+func LocalIP() (string, error) {
+	addr, err := net.ResolveUDPAddr("udp", "1.2.3.4:1")
+	if err != nil {
+		return "", err
+	}
+	conn, err := net.DialUDP("udp", nil, addr)
+	if err != nil {
+		return "", err
+	}
+	defer conn.Close()
+	ip, _, err := net.SplitHostPort(conn.LocalAddr().String())
+	if err != nil {
+		return "", err
+	}
+	return ip, nil
+}
+
+func printServerInfo(root string) {
+	fmt.Println("Serving at:", root)
+	ip, err := LocalIP()
+	if host == "0.0.0.0" && err == nil {
+		fmt.Println("Available on:", ip)
+	}
+}
+
 func main() {
 	flag.Parse()
 	root := flag.Arg(0)
 	addr := fmt.Sprintf("%s:%d", host, port)
 	handler := compose(http.FileServer(http.Dir(root)), []middleware{logRequest})
 	http.Handle("/", handler)
-	log.Printf("start service at: %s", addr)
+	printServerInfo(root)
 	log.Fatal(http.ListenAndServe(addr, nil))
 }
