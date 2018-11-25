@@ -10,14 +10,14 @@ import (
 
 var (
 	host string
-	port int
+	port string
 )
 
 type middleware func(http.Handler) http.Handler
 
 func init() {
 	flag.StringVar(&host, "a", "0.0.0.0", "address to use")
-	flag.IntVar(&port, "p", 8080, "port to bind to")
+	flag.StringVar(&port, "p", "8080", "port to bind to")
 }
 
 func compose(h http.Handler, mws []middleware) http.Handler {
@@ -55,14 +55,14 @@ func printServerInfo(root string) {
 	fmt.Println("Serving at:", root)
 	ip, err := LocalIP()
 	if host == "0.0.0.0" && err == nil {
-		fmt.Println("Available on:", ip)
+		fmt.Println("Available on:", net.JoinHostPort(ip, port))
 	}
 }
 
 func main() {
 	flag.Parse()
 	root := flag.Arg(0)
-	addr := fmt.Sprintf("%s:%d", host, port)
+	addr := net.JoinHostPort(host, port)
 	handler := compose(http.FileServer(http.Dir(root)), []middleware{logRequest})
 	http.Handle("/", handler)
 	printServerInfo(root)
