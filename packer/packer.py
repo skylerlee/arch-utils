@@ -3,10 +3,25 @@ utility for archiving and extracting files.
 """
 
 import argparse
+import getpass
+
+
+def pack(input, output, password):
+    pass
+
+
+def unpack(input, output, password):
+    pass
 
 
 def process(action, input, output, passwd):
-    print(action, input, output, passwd)
+    password = None
+    if passwd:
+        password = getpass.getpass()
+    if action == 'a':
+        pack(input, output, password)
+    elif action == 'x':
+        unpack(input, output, password)
 
 
 def main():
