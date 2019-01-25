@@ -2,4 +2,4 @@
 readonly NAME=cleaner
 readonly ROOT=$(dirname $0)/$NAME
 
-source $ROOT/cleanfs
+source $ROOT/fscleaner
