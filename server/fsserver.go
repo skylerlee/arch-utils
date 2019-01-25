@@ -6,6 +6,8 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 var (
@@ -16,6 +18,10 @@ var (
 type middleware func(http.Handler) http.Handler
 
 func init() {
+	flag.Usage = func() {
+		fmt.Fprintln(os.Stderr, "Usage: server PATH -a <address> -p <port>")
+		flag.PrintDefaults()
+	}
 	flag.StringVar(&host, "a", "0.0.0.0", "address to use")
 	flag.StringVar(&port, "p", "8080", "port to bind to")
 }
@@ -35,7 +41,7 @@ func logRequest(next http.Handler) http.Handler {
 }
 
 func printServerInfo(root string) {
-	fmt.Println("Serving at:", root)
+	fmt.Println("Serving path:", root)
 	ip, err := LocalIP()
 	if host == "0.0.0.0" && err == nil {
 		fmt.Println("Available on:", net.JoinHostPort(ip, port))
@@ -44,7 +50,7 @@ func printServerInfo(root string) {
 
 func main() {
 	flag.Parse()
-	root := flag.Arg(0)
+	root, _ := filepath.Abs(flag.Arg(0))
 	addr := net.JoinHostPort(host, port)
 	handler := compose(http.FileServer(http.Dir(root)), []middleware{logRequest})
 	http.Handle("/", handler)
