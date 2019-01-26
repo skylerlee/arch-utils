@@ -7,26 +7,31 @@ import (
 )
 
 var (
-	password string
-	output   string
+	passwd string
+	output string
 )
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintln(os.Stderr, "Usage: cipher FILE -p <password> -o <path>")
+		printErr("Usage: cipher [OPTION...] FILE")
 		flag.PrintDefaults()
 	}
-	flag.StringVar(&password, "p", "", "password to be applied")
-	flag.StringVar(&output, "o", "", "output file path")
+	flag.StringVar(&passwd, "p", "", "password to be applied")
+	flag.StringVar(&output, "o", "", "file to write output\nUse - to write to standard output")
+}
+
+func printErr(message string) {
+	fmt.Fprintln(os.Stderr, message)
 }
 
 func process(input string) {
-	fmt.Println(input, password, output)
+	fmt.Println(input, passwd, output)
 }
 
 func main() {
 	flag.Parse()
 	if flag.NArg() < 1 {
+		printErr("error: missing input file")
 		flag.Usage()
 		os.Exit(1)
 	}
