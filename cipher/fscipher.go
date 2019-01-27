@@ -25,7 +25,18 @@ func printErr(message string) {
 }
 
 func process(input string) {
-	fmt.Println(input, passwd, output)
+	var file *os.File
+	if input == "-" {
+		// read from standard input
+		file = os.Stdin
+	} else {
+		var err error
+		file, err = os.Open(input)
+		if err != nil {
+			printErr(fmt.Sprintf("No such file: %s", input))
+		}
+	}
+	source(file)
 }
 
 func main() {
