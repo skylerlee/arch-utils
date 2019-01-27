@@ -19,7 +19,7 @@ type middleware func(http.Handler) http.Handler
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintln(os.Stderr, "Usage: server PATH -a <address> -p <port>")
+		fmt.Fprintln(os.Stderr, "Usage: server [OPTION...] PATH")
 		flag.PrintDefaults()
 	}
 	flag.StringVar(&host, "a", "0.0.0.0", "address to use")
