@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
 
+function _clean_packages {
+  echo "Unused packages: $(pacman -Qdt)"
+  local pkgs=$(pacman -Qdtq)
+  if [[ -n $pkgs ]]; then
+    read -p "Remove packages: $pkgs ?"$'\n' -r
+    if [[ $REPLY =~ ^[Yy] ]]; then
+      sudo pacman -Rscun $pkgs
+    fi
+  fi
+}
+
+_clean_packages
 sudo pacman -Sc
 sudo journalctl --vacuum-size 512M
