@@ -35,6 +35,7 @@ func process(input string) {
 		if err != nil {
 			printErr(fmt.Sprintf("No such file: %s", input))
 		}
+		defer file.Close()
 	}
 	source(file)
 }
