@@ -1,11 +1,10 @@
 BUILD_FLAGS := -ldflags "-s -w"
-OUTPUT_PATH := $(PWD)/bin
+OUTPUT_PATH := ./bin/fsserver
 
 .PHONY: default
 
 default: build
 
-build: export GOBIN = $(OUTPUT_PATH)
 build:
-	go install $(BUILD_FLAGS) .
+	go build $(BUILD_FLAGS) -o $(OUTPUT_PATH)
 	@echo "Build done"

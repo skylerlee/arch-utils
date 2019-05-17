@@ -2,4 +2,4 @@
 readonly NAME=_server
 readonly ROOT=$(dirname $0)/$NAME
 
-$ROOT/bin/server $@
+$ROOT/bin/fsserver $@
