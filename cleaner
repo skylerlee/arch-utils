@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-readonly NAME=server
+readonly NAME=_cleaner
 readonly ROOT=$(dirname $0)/$NAME
 
-$ROOT/bin/server $@
+source $ROOT/fscleaner

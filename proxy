@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-readonly NAME=proxy
+readonly NAME=_proxy
 readonly ROOT=$(dirname $0)/$NAME
 
 pushd $ROOT > /dev/null
