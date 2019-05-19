@@ -39,7 +39,7 @@ func (c *Client) preprocess(req *http.Request) *http.Request {
 	return req
 }
 
-func (c *Client) Get(url string, v interface{}) bool {
+func (c *Client) Get(url string, v interface{}) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		panic(err)
@@ -50,14 +50,16 @@ func (c *Client) Get(url string, v interface{}) bool {
 		panic(err)
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		panic(resp.Status)
+	}
 	err = json.NewDecoder(resp.Body).Decode(v)
 	if err != nil {
 		panic(err)
 	}
-	return resp.StatusCode == 200
 }
 
-func (c *Client) Patch(url string, v interface{}) bool {
+func (c *Client) Patch(url string, v interface{}) {
 	buf := new(bytes.Buffer)
 	err := json.NewEncoder(buf).Encode(v)
 	if err != nil {
@@ -73,5 +75,7 @@ func (c *Client) Patch(url string, v interface{}) bool {
 		panic(err)
 	}
 	defer resp.Body.Close()
-	return resp.StatusCode == 200
+	if resp.StatusCode != 200 {
+		panic(resp.Status)
+	}
 }

@@ -26,8 +26,8 @@ func GetGist(gistId string) *Gist {
 	return gist
 }
 
-func PatchGist(gistId string, gist *Gist) bool {
+func PatchGist(gistId string, gist *Gist) {
 	url := baseURL + "/gists/" + gistId
 	client := Client{}
-	return client.Patch(url, gist)
+	client.Patch(url, gist)
 }
