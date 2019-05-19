@@ -1,5 +1,5 @@
 BUILD_FLAGS := -ldflags "-s -w"
-OUTPUT_PATH := ./bin/gmotif
+OUTPUT_PATH := ./bin/gotif
 
 .PHONY: default
 
