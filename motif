@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+readonly NAME=_motif
+readonly ROOT=$(dirname $0)/$NAME
+
+$ROOT/bin/gmotif $@
