@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 	defer func() {
@@ -10,5 +12,12 @@ func main() {
 		}
 	}()
 	conf := LoadConf("conf/gist.json")
-	fmt.Println(conf)
+	client := Client{}
+	// client.Filter = func(req *http.Request) *http.Request {
+	// 	req.Header.Set("Authorization", "token "+conf.Token)
+	// 	return req
+	// }
+	gist := NewGist()
+	gist.Files["savebox.zenc.txt"] = GistFile{"savebox.zenc.txt", ""}
+	client.PatchGist(conf.GistID, gist)
 }

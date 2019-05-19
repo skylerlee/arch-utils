@@ -25,16 +25,16 @@ func LoadConf(filename string) Conf {
 	return cfg
 }
 
-type Filter func(*http.Request) *http.Request
+type RequestFilter func(*http.Request) *http.Request
 
 type Client struct {
 	client http.Client
-	filter Filter
+	Filter RequestFilter
 }
 
 func (c *Client) preprocess(req *http.Request) *http.Request {
-	if c.filter != nil {
-		req = c.filter(req)
+	if c.Filter != nil {
+		req = c.Filter(req)
 	}
 	return req
 }

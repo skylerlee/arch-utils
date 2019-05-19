@@ -18,16 +18,14 @@ func NewGist() *Gist {
 	return &Gist{"", make(map[string]GistFile)}
 }
 
-func GetGist(gistId string) *Gist {
+func (c *Client) GetGist(gistId string) *Gist {
 	url := baseURL + "/gists/" + gistId
 	gist := &Gist{}
-	client := Client{}
-	client.Get(url, gist)
+	c.Get(url, gist)
 	return gist
 }
 
-func PatchGist(gistId string, gist *Gist) {
+func (c *Client) PatchGist(gistId string, gist *Gist) {
 	url := baseURL + "/gists/" + gistId
-	client := Client{}
-	client.Patch(url, gist)
+	c.Patch(url, gist)
 }
