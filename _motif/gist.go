@@ -26,21 +26,9 @@ func NewGist() *Gist {
 
 func GetGist(gistId string) *Gist {
 	url := baseURL + "/gists/" + gistId
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		panic(err)
-	}
-	client := http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
 	gist := &Gist{}
-	err = json.NewDecoder(resp.Body).Decode(gist)
-	if err != nil {
-		panic(err)
-	}
+	client := Client{}
+	client.Get(url, gist)
 	return gist
 }
 
