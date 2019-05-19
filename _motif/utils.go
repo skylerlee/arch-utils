@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -56,3 +57,21 @@ func (c *Client) Get(url string, v interface{}) bool {
 	return resp.StatusCode == 200
 }
 
+func (c *Client) Patch(url string, v interface{}) bool {
+	buf := new(bytes.Buffer)
+	err := json.NewEncoder(buf).Encode(v)
+	if err != nil {
+		panic(err)
+	}
+	req, err := http.NewRequest("PATCH", url, buf)
+	if err != nil {
+		panic(err)
+	}
+	req = c.preprocess(req)
+	resp, err := c.client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	return resp.StatusCode == 200
+}
