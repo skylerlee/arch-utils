@@ -47,6 +47,21 @@ func handleError() {
 	}
 }
 
+func process() {
+	conf := LoadConf("conf/gist.json")
+	client := Client{}
+	// client.Filter = func(req *http.Request) *http.Request {
+	// 	req.Header.Set("Authorization", "token "+conf.Token)
+	// 	return req
+	// }
+	switch {
+	case listing:
+		gist := client.GetGist(conf.GistID)
+		for name := range gist.Files {
+			fmt.Println("*", name)
+		}
+}
+
 func main() {
 	defer handleError()
 	flag.Parse()
@@ -57,13 +72,5 @@ func main() {
 		flag.Usage()
 		return
 	}
-	conf := LoadConf("conf/gist.json")
-	client := Client{}
-	// client.Filter = func(req *http.Request) *http.Request {
-	// 	req.Header.Set("Authorization", "token "+conf.Token)
-	// 	return req
-	// }
-	gist := NewGist()
-	gist.Files["savebox.zenc.txt"] = GistFile{"savebox.zenc.txt", ""}
-	client.PatchGist(conf.GistID, gist)
+	process()
 }
