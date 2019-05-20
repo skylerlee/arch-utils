@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -60,6 +61,14 @@ func process() {
 		for name := range gist.Files {
 			fmt.Println("*", name)
 		}
+	case target != "":
+		gist := client.GetGist(conf.GistID)
+		targetFile, ok := gist.Files[target]
+		if !ok {
+			panic(errors.New("file not found"))
+		}
+		fmt.Println(targetFile.Content)
+	}
 }
 
 func main() {
