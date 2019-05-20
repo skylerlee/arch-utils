@@ -4,6 +4,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"net/http"
 	"os"
 )
 
@@ -48,13 +49,19 @@ func handleError() {
 	}
 }
 
+func (c *Client) setAuth(token string) {
+	c.Filter = func(req *http.Request) *http.Request {
+		req.Header.Set("Authorization", "token "+token)
+		return req
+	}
+}
+
 func process() {
 	conf := LoadConf("conf/gist.json")
 	client := Client{}
-	// client.Filter = func(req *http.Request) *http.Request {
-	// 	req.Header.Set("Authorization", "token "+conf.Token)
-	// 	return req
-	// }
+	if conf.Token != "" {
+		client.setAuth(conf.Token)
+	}
 	switch {
 	case listing:
 		gist := client.GetGist(conf.GistID)
