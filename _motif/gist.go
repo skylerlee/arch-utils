@@ -4,16 +4,19 @@ const (
 	baseURL = "https://api.github.com"
 )
 
+// GistFile represents a file in gist
 type GistFile struct {
 	Filename string `json:"filename"`
 	Content  string `json:"content"`
 }
 
+// Gist represents a gist
 type Gist struct {
 	Description string              `json:"description"`
 	Files       map[string]GistFile `json:"files"`
 }
 
+// NewGist creates an empty Gist
 func NewGist() *Gist {
 	return &Gist{"", make(map[string]GistFile)}
 }
