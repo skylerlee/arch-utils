@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -43,43 +44,40 @@ func (c *Client) preprocess(req *http.Request) *http.Request {
 	return req
 }
 
-func (c *Client) Get(url string, v interface{}) {
-	req, err := http.NewRequest("GET", url, nil)
+func (c *Client) dumpData(data interface{}) (rd io.Reader, err error) {
+	buf := new(bytes.Buffer)
+	err = json.NewEncoder(buf).Encode(data)
 	if err != nil {
-		panic(err)
+		return
 	}
-	req = c.preprocess(req)
-	resp, err := c.client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		panic(resp.Status)
-	}
-	err = json.NewDecoder(resp.Body).Decode(v)
-	if err != nil {
-		panic(err)
-	}
+	rd = buf
+	return
 }
 
-func (c *Client) Patch(url string, v interface{}) {
-	buf := new(bytes.Buffer)
-	err := json.NewEncoder(buf).Encode(v)
+func (c *Client) loadResult(result interface{}, rd io.Reader) (err error) {
+	err = json.NewDecoder(rd).Decode(result)
+	return
+}
+
+// Request sends and receives JSON data
+func (c *Client) Request(method, url string, data interface{}, result interface{}) (err error) {
+	body, err := c.dumpData(data)
 	if err != nil {
-		panic(err)
+		return
 	}
-	req, err := http.NewRequest("PATCH", url, buf)
+	req, err := http.NewRequest(method, url, body)
 	if err != nil {
-		panic(err)
+		return
 	}
 	req = c.preprocess(req)
 	resp, err := c.client.Do(req)
 	if err != nil {
-		panic(err)
+		return
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		panic(resp.Status)
 	}
+	err = c.loadResult(result, resp.Body)
+	return
 }
