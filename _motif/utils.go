@@ -45,6 +45,9 @@ func (c *Client) preprocess(req *http.Request) *http.Request {
 }
 
 func (c *Client) dumpData(data interface{}) (rd io.Reader, err error) {
+	if data == nil {
+		return
+	}
 	buf := new(bytes.Buffer)
 	err = json.NewEncoder(buf).Encode(data)
 	if err != nil {
