@@ -7,11 +7,13 @@ import (
 	"net/http"
 )
 
+// Conf represents the gist config
 type Conf struct {
 	GistID string `json:"gistId"`
 	Token  string `json:"token"`
 }
 
+// LoadConf loads the Conf from a given filename
 func LoadConf(filename string) Conf {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -25,8 +27,10 @@ func LoadConf(filename string) Conf {
 	return cfg
 }
 
+// RequestFilter represents a preprocessor of the http.Request
 type RequestFilter func(*http.Request) *http.Request
 
+// Client wraps the http.Client for better JSON processing
 type Client struct {
 	client http.Client
 	Filter RequestFilter
