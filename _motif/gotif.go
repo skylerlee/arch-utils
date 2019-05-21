@@ -64,12 +64,18 @@ func process() {
 	}
 	switch {
 	case listing:
-		gist := client.GetGist(conf.GistID)
+		gist, err := client.GetGist(conf.GistID)
+		if err != nil {
+			panic(err)
+		}
 		for name := range gist.Files {
 			fmt.Println("*", name)
 		}
 	case target != "":
-		gist := client.GetGist(conf.GistID)
+		gist, err := client.GetGist(conf.GistID)
+		if err != nil {
+			panic(err)
+		}
 		targetFile, ok := gist.Files[target]
 		if !ok {
 			panic(errors.New("file not found"))
