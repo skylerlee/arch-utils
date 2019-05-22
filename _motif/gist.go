@@ -21,8 +21,9 @@ func NewGist() *Gist {
 	return &Gist{"", make(map[string]GistFile)}
 }
 
-func (c *Client) GetGist(gistId string) (ret *Gist, err error) {
-	url := baseURL + "/gists/" + gistId
+// GetGist reads the gist from a given gistID
+func (c *Client) GetGist(gistID string) (ret *Gist, err error) {
+	url := baseURL + "/gists/" + gistID
 	tmp := &Gist{}
 	err = c.Request("GET", url, nil, tmp)
 	if err != nil {
@@ -32,8 +33,9 @@ func (c *Client) GetGist(gistId string) (ret *Gist, err error) {
 	return
 }
 
-func (c *Client) PatchGist(gistId string, gist *Gist) (ret *Gist, err error) {
-	url := baseURL + "/gists/" + gistId
+// PatchGist updates the associated gist by gistID
+func (c *Client) PatchGist(gistID string, gist *Gist) (ret *Gist, err error) {
+	url := baseURL + "/gists/" + gistID
 	tmp := &Gist{}
 	err = c.Request("PATCH", url, gist, tmp)
 	if err != nil {
