@@ -49,18 +49,14 @@ func handleError() {
 	}
 }
 
-func (c *Client) setAuth(token string) {
-	c.Filter = func(req *http.Request) *http.Request {
-		req.Header.Set("Authorization", "token "+token)
-		return req
-	}
-}
-
 func process() {
 	conf := LoadConf("conf/gist.json")
 	client := Client{}
 	if conf.Token != "" {
-		client.setAuth(conf.Token)
+		client.Filter = func(req *http.Request) *http.Request {
+			req.Header.Set("Authorization", "token "+conf.Token)
+			return req
+		}
 	}
 	switch {
 	case listing:
