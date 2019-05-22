@@ -50,7 +50,10 @@ func handleError() {
 }
 
 func process() {
-	conf := LoadConf("conf/gist.json")
+	conf, err := LoadConf("conf/gist.json")
+	if err != nil {
+		panic(err)
+	}
 	client := Client{}
 	if conf.Token != "" {
 		client.Filter = func(req *http.Request) *http.Request {

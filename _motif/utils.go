@@ -15,17 +15,18 @@ type Conf struct {
 }
 
 // LoadConf loads the Conf from a given filename
-func LoadConf(filename string) Conf {
+func LoadConf(filename string) (cfg Conf, err error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
-		panic(err)
+		return
 	}
-	cfg := Conf{}
-	err = json.Unmarshal(data, &cfg)
+	tmp := Conf{}
+	err = json.Unmarshal(data, &tmp)
 	if err != nil {
-		panic(err)
+		return
 	}
-	return cfg
+	cfg = tmp
+	return
 }
 
 // RequestFilter represents a preprocessor of the http.Request
