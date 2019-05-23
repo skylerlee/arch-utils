@@ -79,7 +79,7 @@ func (c *Client) Request(method, url string, data interface{}, result interface{
 		return
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		panic(resp.Status)
 	}
 	err = c.loadResult(result, resp.Body)
