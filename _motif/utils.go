@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -95,7 +96,7 @@ func (c *Client) Request(method, url string, data interface{}, result interface{
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		panic(resp.Status)
+		panic(errors.New("Failed: " + resp.Status))
 	}
 	err = c.loadResult(result, resp.Body)
 	return
