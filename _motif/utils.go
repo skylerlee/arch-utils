@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 // Conf represents the gist config
@@ -36,6 +37,16 @@ type RequestFilter func(*http.Request) *http.Request
 type Client struct {
 	client http.Client
 	Filter RequestFilter
+	Base   *url.URL
+}
+
+// NewClient creates a Client using a base URL
+func NewClient(basePath string) *Client {
+	base, err := url.Parse(basePath)
+	if err != nil {
+		panic(err)
+	}
+	return &Client{Base: base}
 }
 
 func (c *Client) preprocess(req *http.Request) *http.Request {
@@ -69,7 +80,11 @@ func (c *Client) Request(method, url string, data interface{}, result interface{
 	if err != nil {
 		return
 	}
-	req, err := http.NewRequest(method, url, body)
+	reqURL, err := c.Base.Parse(url)
+	if err != nil {
+		return
+	}
+	req, err := http.NewRequest(method, reqURL.String(), body)
 	if err != nil {
 		return
 	}

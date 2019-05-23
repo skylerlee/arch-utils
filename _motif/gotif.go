@@ -8,6 +8,8 @@ import (
 	"os"
 )
 
+const api = "https://api.github.com"
+
 var (
 	help    bool
 	listing bool
@@ -54,7 +56,7 @@ func process() {
 	if err != nil {
 		panic(err)
 	}
-	client := Client{}
+	client := NewClient(api)
 	if conf.Token != "" {
 		client.Filter = func(req *http.Request) *http.Request {
 			req.Header.Set("Authorization", "token "+conf.Token)

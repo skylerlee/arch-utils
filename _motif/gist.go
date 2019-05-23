@@ -5,10 +5,6 @@ import (
 	"path"
 )
 
-const (
-	baseURL = "https://api.github.com"
-)
-
 // GistFile represents a file in gist
 type GistFile struct {
 	Filename string `json:"filename"`
@@ -28,7 +24,7 @@ func NewGist() *Gist {
 
 // GetGist reads the gist from a given gistID
 func (c *Client) GetGist(gistID string) (ret *Gist, err error) {
-	url := path.Join(baseURL, "gists", gistID)
+	url := path.Join("/gists", gistID)
 	tmp := &Gist{}
 	err = c.Request(http.MethodGet, url, nil, tmp)
 	if err != nil {
@@ -40,7 +36,7 @@ func (c *Client) GetGist(gistID string) (ret *Gist, err error) {
 
 // PatchGist updates the associated gist by gistID
 func (c *Client) PatchGist(gistID string, gist *Gist) (ret *Gist, err error) {
-	url := path.Join(baseURL, "gists", gistID)
+	url := path.Join("/gists", gistID)
 	tmp := &Gist{}
 	err = c.Request(http.MethodPatch, url, gist, tmp)
 	if err != nil {
