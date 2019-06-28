@@ -11,7 +11,7 @@ def fetch_feed(url):
 
 def padding(data):
     length = len(data)
-    pad = 4 - length % 4
+    pad = -length % 4
     return data + b'=' * pad
 
 def get_lines(s):
@@ -19,14 +19,21 @@ def get_lines(s):
     return filter(lambda i: i, lines)
 
 def parse_ssr_url(url):
-    pass
+    protocol = 'ssr://'
+    if not url.startswith(protocol):
+        return None
+    raw = url[len(protocol):]
+    data = padding(raw.encode('utf-8'))
+    text = base64.b64decode(data, '-_').decode('utf-8')
+    return text.split(':')
 
 def parse_feed(url):
     raw = fetch_feed(url)
     data = padding(raw)
     text = base64.decodebytes(data).decode('utf-8')
     for line in get_lines(text):
-        parse_ssr_url(line)
+        segs = parse_ssr_url(line)
+        print(segs)
 
 
 if __name__ == '__main__':
