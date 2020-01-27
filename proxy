@@ -2,8 +2,10 @@
 readonly NAME=_proxy
 readonly ROOT=$(dirname $0)/$NAME
 
+config=${1:-shadowsocks}
+
 pushd $ROOT > /dev/null
 
-nohup ss-local -c conf/shadowsocks.json > log/error.log 2>&1 &
+nohup ss-local -c conf/${config}.json > log/error.log 2>&1 &
 
 popd > /dev/null
