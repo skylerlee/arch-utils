@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-readonly NAME=_server
-readonly ROOT=$(dirname $0)/$NAME
+readonly ROOT=$(dirname $0)/_server
 
 $ROOT/bin/fsserver $@

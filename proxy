@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-readonly NAME=_proxy
-readonly ROOT=$(dirname $0)/$NAME
+readonly ROOT=$(dirname $0)/_proxy
 
 config=${1:-shadowsocks}
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-readonly NAME=_cleaner
-readonly ROOT=$(dirname $0)/$NAME
+readonly ROOT=$(dirname $0)/_cleaner
 
 source $ROOT/fscleaner
